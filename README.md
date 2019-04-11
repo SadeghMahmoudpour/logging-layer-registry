@@ -5,7 +5,7 @@ This setup assumes you already have docker-compose and docker (using docker tool
 
 
 ```
-git clone git@github.com:SadeghMahmoudpour/logging-layer-registry.git
+git clone https://github.com/SadeghMahmoudpour/logging-layer-registry.git
 cd logging-layer-registry
 docker-compose up
 ```
