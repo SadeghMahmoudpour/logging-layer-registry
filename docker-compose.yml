@@ -1,0 +1,100 @@
+version: "2"
+
+services:
+  rabbit:
+    image: rabbitmq:3-management
+    container_name: log-rabbit
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - "./rabbit/enabled_plugins:/etc/rabbitmq/enabled_plugins"
+
+  mongo:
+    image: mongo:latest
+    container_name: log-mongo
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./mongo/data/db:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null
+
+  fluentd:
+    build: ./fluentd
+    container_name: log-fluentd
+    volumes:
+      - ./fluentd/log:/fluentd/log
+      - ./fluentd/conf:/fluentd/etc
+    ports:
+      - 24224:24224
+      - 9292:9292
+    depends_on:
+      - namenode
+      - datanode1
+      - mongo
+      - rabbit
+
+  namenode:
+    image: bde2020/hadoop-namenode:1.1.0-hadoop2.7.1-java8
+    container_name: log-namenode
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop/hadoop.env
+    ports:
+      - "50070:50070"
+
+  resourcemanager:
+    image: bde2020/hadoop-resourcemanager:1.1.0-hadoop2.7.1-java8
+    container_name: log-resourcemanager
+    depends_on:
+      - namenode
+      - datanode1
+    env_file:
+      - ./hadoop/hadoop.env
+
+  historyserver:
+    image: bde2020/hadoop-historyserver:1.1.0-hadoop2.7.1-java8
+    container_name: log-historyserver
+    depends_on:
+      - namenode
+      - datanode1
+    volumes:
+      - hadoop_historyserver:/hadoop/yarn/timeline
+    env_file:
+      - ./hadoop/hadoop.env
+
+  nodemanager1:
+    image: bde2020/hadoop-nodemanager:1.1.0-hadoop2.7.1-java8
+    container_name: log-nodemanager1
+    depends_on:
+      - namenode
+      - datanode1
+    env_file:
+      - ./hadoop/hadoop.env
+
+  datanode1:
+    image: bde2020/hadoop-datanode:1.1.0-hadoop2.7.1-java8
+    container_name: log-datanode1
+    depends_on:
+      - namenode
+    volumes:
+      - hadoop_datanode1:/hadoop/dfs/data
+    env_file:
+      - ./hadoop/hadoop.env
+
+
+volumes:
+  hadoop_namenode:
+  hadoop_datanode1:
+  hadoop_historyserver:
