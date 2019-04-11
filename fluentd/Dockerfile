@@ -22,10 +22,6 @@ RUN apt-get install zlib1g-dev\
 
 RUN gem install fluent-plugin-mongo
 
-#RUN gem install fluent-plugin-webhdfs
-
-#RUN gem install fluent-plugin-rabbitmq
+RUN gem install fluent-plugin-webhdfs
 
 RUN gem install fluent-plugin-amqp
-
-#RUN gem install fluent-plugin-influxdb

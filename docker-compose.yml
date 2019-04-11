@@ -93,7 +93,6 @@ services:
     env_file:
       - ./hadoop/hadoop.env
 
-
 volumes:
   hadoop_namenode:
   hadoop_datanode1:
