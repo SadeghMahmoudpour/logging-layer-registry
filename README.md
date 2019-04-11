@@ -21,5 +21,5 @@ and use the login
 username: rabbitmq
 password: rabbitmq
 ```
-got to Queues and select "logs" queue http://localhost:15672/\#/queues/%2F/logs(http://localhost:15672/#/queues/%2F/logs)  
+got to Queues and select "logs" queue [http://localhost:15672/\#/queues/%2F/logs](http://localhost:15672/#/queues/%2F/logs)  
 here you can publish your message with json payload as data and header named "tag" with this format: "mongo.{collection name}" to register data in mongo or "hdfs.{file name}" for hdfs
