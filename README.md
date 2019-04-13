@@ -10,6 +10,8 @@ git clone https://github.com/SadeghMahmoudpour/logging-layer-registry.git
 cd logging-layer-registry
 docker-compose up
 ```
+try [logging-layer-api](https://github.com/SadeghMahmoudpour/logging-layer-api) and [logging-layer-web](https://github.com/SadeghMahmoudpour/logging-layer-web) to manage your logs and clients
+
 ## Play
 first you need to add your message in rabbit.
 ```
@@ -24,5 +26,3 @@ password: rabbitmq
 got to Queues and select "logs" queue [http://localhost:15672/\#/queues/%2F/logs](http://localhost:15672/#/queues/%2F/logs)  
 here you can publish your message with json payload as data and header named "tag" with this format: "mongo.{collection name}" to register data in mongo or "hdfs.{file name}" for hdfs  
 ![](https://github.com/SadeghMahmoudpour/logging-layer-registry/blob/master/rabbit-test.png)
-
-
